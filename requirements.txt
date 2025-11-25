@@ -1,0 +1,9 @@
+Flask
+flask_socketio
+fyers_apiv3
+SQLAlchemy
+polars
+gunicorn
+eventlet
+python-dotenv
+setuptools

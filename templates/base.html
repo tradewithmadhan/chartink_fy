@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chartink</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+		rel="stylesheet">
+	<style>
+		/* Reset and Base Styles */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			background: #000000;
+			color: #ffffff;
+			overflow-x: hidden;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		/* Home Container */
+		.home-container {
+			position: relative;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+		}
+
+		/* Grid Background - Enhanced Visibility */
+		.grid-background {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #000000;
+			background-image:
+				linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+			background-size: 50px 50px;
+			z-index: 0;
+			pointer-events: none;
+		}
+
+		.grid-background::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: radial-gradient(circle at 50% 40%, rgba(88, 28, 135, 0.25) 0%, rgba(59, 130, 246, 0.1) 30%, transparent 60%);
+			animation: pulse 8s ease-in-out infinite;
+		}
+
+		.grid-background::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background:
+				radial-gradient(circle at 20% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%),
+				radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+		}
+
+		@keyframes pulse {
+
+			0%,
+			100% {
+				opacity: 0.7;
+			}
+
+			50% {
+				opacity: 1;
+			}
+		}
+
+		/* Navigation - Transparent to show grid */
+		.top-nav {
+			position: relative;
+			z-index: 10;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem 3rem;
+			background: rgba(0, 0, 0, 0.2);
+			backdrop-filter: blur(10px);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+		}
+
+		.nav-left {
+			display: flex;
+			gap: 2rem;
+		}
+
+		.nav-link {
+			color: rgba(255, 255, 255, 0.7);
+			text-decoration: none;
+			font-size: 0.9rem;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			position: relative;
+		}
+
+		.nav-link::after {
+			content: '';
+			position: absolute;
+			bottom: -4px;
+			left: 0;
+			width: 0;
+			height: 2px;
+			background: linear-gradient(90deg, #ec4899, #8b5cf6);
+			transition: width 0.3s ease;
+		}
+
+		.nav-link:hover {
+			color: #ffffff;
+		}
+
+		.nav-link:hover::after {
+			width: 100%;
+		}
+
+		.brand {
+			font-size: 1rem;
+			font-weight: 600;
+			background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			background-size: 200% 200%;
+			animation: gradientShift 5s ease infinite;
+			letter-spacing: 0.5px;
+		}
+
+		/* Hero Section */
+		.hero-section {
+			position: relative;
+			z-index: 5;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 4rem 2rem;
+			text-align: center;
+		}
+
+		/* Open Source Badge */
+		.open-source-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.5rem 1.25rem;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 50px;
+			font-size: 0.85rem;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.9);
+			margin-bottom: 2.5rem;
+			backdrop-filter: blur(10px);
+			animation: fadeInDown 0.8s ease-out;
+		}
+
+		.badge-icon {
+			color: #22c55e;
+			font-size: 1rem;
+			animation: rotate 3s linear infinite;
+		}
+
+		@keyframes rotate {
+			from {
+				transform: rotate(0deg);
+			}
+
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@keyframes fadeInDown {
+			from {
+				opacity: 0;
+				transform: translateY(-20px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* Hero Title */
+		.hero-title {
+			font-size: 4.5rem;
+			font-weight: 800;
+			line-height: 1.1;
+			margin-bottom: 1.5rem;
+			animation: fadeInUp 0.8s ease-out 0.2s both;
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.gradient-text {
+			background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			background-size: 200% 200%;
+			animation: gradientShift 5s ease infinite;
+		}
+
+		@keyframes gradientShift {
+
+			0%,
+			100% {
+				background-position: 0% 50%;
+			}
+
+			50% {
+				background-position: 100% 50%;
+			}
+		}
+
+		/* Hero Description */
+		.hero-description {
+			font-size: 1.15rem;
+			line-height: 1.7;
+			color: rgba(255, 255, 255, 0.6);
+			max-width: 700px;
+			margin: 0 auto 3rem;
+			font-weight: 400;
+			animation: fadeInUp 0.8s ease-out 0.4s both;
+		}
+
+		/* GitHub Button */
+		.github-button {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.75rem;
+			padding: 0.875rem 2rem;
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 12px;
+			color: #ffffff;
+			text-decoration: none;
+			font-size: 0.95rem;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+			position: relative;
+			overflow: hidden;
+			animation: fadeInUp 0.8s ease-out 0.6s both;
+		}
+
+		.github-button::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+			transition: left 0.5s ease;
+		}
+
+		.github-button:hover::before {
+			left: 100%;
+		}
+
+		.github-button:hover {
+			background: rgba(255, 255, 255, 0.12);
+			border-color: rgba(255, 255, 255, 0.3);
+			transform: translateY(-2px);
+			box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+		}
+
+		.github-icon,
+		.arrow-icon {
+			width: 18px;
+			height: 18px;
+			transition: transform 0.3s ease;
+		}
+
+		.github-button:hover .arrow-icon {
+			transform: translateX(4px);
+		}
+
+		/* Quick Access */
+		.quick-access {
+			margin-top: 2rem;
+			animation: fadeInUp 0.8s ease-out 0.8s both;
+		}
+
+		.chart-link {
+			color: rgba(255, 255, 255, 0.5);
+			text-decoration: none;
+			font-size: 0.9rem;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			display: inline-block;
+		}
+
+		.chart-link:hover {
+			color: #8b5cf6;
+			transform: translateX(4px);
+		}
+
+		/* Responsive Design */
+		@media (max-width: 1024px) {
+			.hero-title {
+				font-size: 3.5rem;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.top-nav {
+				padding: 0.75rem 1.5rem;
+			}
+
+			.nav-left {
+				gap: 1rem;
+			}
+
+			.nav-link {
+				font-size: 0.8rem;
+			}
+
+			.hero-title {
+				font-size: 2.5rem;
+			}
+
+			.hero-description {
+				font-size: 1rem;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.hero-title {
+				font-size: 2rem;
+			}
+
+			.hero-description br {
+				display: none;
+			}
+
+			.github-button {
+				padding: 0.75rem 1.5rem;
+				font-size: 0.85rem;
+			}
+		}
+
+		/* Accessibility */
+		@media (prefers-reduced-motion: reduce) {
+
+			*,
+			*::before,
+			*::after {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				transition-duration: 0.01ms !important;
+			}
+		}
+
+		/* Disclaimer */
+		.disclaimer-container {
+			margin-top: 4rem;
+			padding: 1rem;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			animation: fadeInUp 0.8s ease-out 1s both;
+		}
+
+		.disclaimer-box {
+			background: rgba(20, 10, 5, 0.6);
+			padding: 1rem 1.5rem;
+			border-radius: 8px;
+			display: flex;
+			align-items: flex-start;
+			gap: 1rem;
+			max-width: 900px;
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(245, 158, 11, 0.1);
+			border-left: 4px solid #f59e0b;
+		}
+
+		.disclaimer-icon {
+			color: #f59e0b;
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
+
+		.disclaimer-text {
+			font-size: 0.9rem;
+			color: #ffffff;
+			line-height: 1.5;
+			text-align: left;
+			font-weight: 500;
+		}
+
+		.disclaimer-title {
+			color: #f59e0b;
+			font-weight: 800;
+			text-transform: uppercase;
+			margin-right: 0.3rem;
+		}
+
+		@media (max-width: 768px) {
+			.disclaimer-box {
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				padding: 1rem;
+			}
+
+			.disclaimer-text {
+				text-align: center;
+			}
+		}
+
+		/* Minimal Footer */
+		.minimal-footer {
+			width: 100%;
+			padding: 2rem 1rem;
+			text-align: center;
+			margin-top: auto;
+			position: relative;
+			z-index: 10;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+		}
+
+		.footer-content {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			font-size: 0.85rem;
+			color: rgba(255, 255, 255, 0.4);
+			font-weight: 400;
+		}
+
+		.brand-highlight {
+			color: #ec4899;
+			font-weight: 600;
+			background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		.version-info {
+			font-size: 0.75rem;
+			opacity: 0.6;
+			font-family: monospace;
+			letter-spacing: 0.5px;
+		}
+
+		.support-text {
+			margin-top: 0.25rem;
+			transition: color 0.3s ease;
+		}
+
+		.support-text:hover {
+			color: rgba(255, 255, 255, 0.8);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="home-container">
+		<!-- Navigation -->
+		<nav class="top-nav">
+			<div class="nav-right">
+				<span class="brand">Chartink</span>
+			</div>
+			<div class="nav-left">
+				<a href="/login" class="nav-link">Login</a>
+				<a href="/logout" class="nav-link">Logout</a>
+			</div>
+		</nav>
+
+		<!-- Hero Section -->
+		<div class="hero-section">
+			<div class="open-source-badge">
+				<span class="badge-icon">✦</span>
+				<span>Open Source</span>
+			</div>
+
+			<h1 class="hero-title">
+				<span class="gradient-text">Professional Order Flow</span>
+			</h1>
+
+			<p class="hero-description">
+				Real-time footprint charts, volume profile and market profile. Built for traders who<br>
+				demand professional-grade analytics.
+			</p>
+
+			<!-- CTA Button -->
+			<a href="https://github.com/kodebuds/chartink" target="_blank" class="github-button">
+				<svg class="github-icon" viewBox="0 0 16 16" fill="currentColor">
+					<path
+						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+					</path>
+				</svg>
+				<span>View on GitHub</span>
+				<svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+					<path fill-rule="evenodd"
+						d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z" />
+				</svg>
+			</a>
+
+			<!-- Quick Access Link -->
+			<div class="quick-access">
+				<a href="/chart" class="chart-link">Go to Chart →</a>
+			</div>
+
+			<!-- Disclaimer -->
+			<div class="disclaimer-container">
+				<div class="disclaimer-box">
+					<svg class="disclaimer-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path
+							d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+						</path>
+						<line x1="12" y1="9" x2="12" y2="13"></line>
+						<line x1="12" y1="17" x2="12.01" y2="17"></line>
+					</svg>
+					<div class="disclaimer-text">
+						<span class="disclaimer-title">Disclaimer:</span>
+						This software is for educational purposes only. Not intended for real trading decisions. Authors
+						are not responsible for financial losses. Always do your own research. Trading involves
+						substantial risk.
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Minimal Footer -->
+		<footer class="minimal-footer">
+			<div class="footer-content">
+				<p>Made with ❤️ by <span class="brand-highlight">&gt;kodebuds</span></p>
+				<p class="version-info">Version 1.0.0 • Last Updated: Nov 25, 2025</p>
+				<p class="support-text">If you find this helpful, please ⭐ the repository and buy me a coffee ☕</p>
+			</div>
+		</footer>
+
+		<!-- Grid Background -->
+		<div class="grid-background"></div>
+	</div>
+</body>
+
+</html>
