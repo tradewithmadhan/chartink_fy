@@ -56,7 +56,6 @@ export function createNavbar() {
         </div>
         <div id="navbar-right" class="navbar-section">
             <div class="layout-controls">
-                <div id="navbar-clock" class="navbar-clock" title="Local time (timezone aware)"></div>
                 <!-- Single layout menu trigger: opens dropdown containing layout choices -->
                     <div id="layout-menu" style="position:relative; display:inline-block;">
                     <button id="layout-menu-trigger" class="layout-btn" title="Layouts">
@@ -128,6 +127,13 @@ export function createNavbar() {
     `;
 
     document.body.prepend(navbar);
+
+    // Create bottom right corner clock
+    const bottomClock = document.createElement('div');
+    bottomClock.id = 'bottom-clock';
+    bottomClock.className = 'bottom-clock';
+    bottomClock.title = 'Local time (timezone aware)';
+    document.body.appendChild(bottomClock);
 
     // Layout button event handling will be set up in chart.js
     // to ensure proper state management and persistence
@@ -554,7 +560,7 @@ function getClockSettings() {
 
 let _clockInterval = null;
 function startNavbarClock() {
-    const el = document.getElementById('navbar-clock');
+    const el = document.getElementById('bottom-clock');
     if (!el) return;
     if (_clockInterval) clearInterval(_clockInterval);
     const { timezone, use12Hour } = getClockSettings();
@@ -887,19 +893,22 @@ export function injectStyles() {
             color: #D1D4DC;
         }
 
-        /* Navbar clock (styled like previous label) */
-        .navbar-clock {
+        /* Bottom right corner clock */
+        .bottom-clock {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
             font-family: monospace;
-            font-size: 12px;
+            font-size: 10px;
             color: var(--text-secondary);
-            padding-left: 8px;
-            padding-right: 8px;
-            display: inline-flex;
-            align-items: center;
-            height: 100%;
+            background: rgba(19, 23, 34, 0.9);
+            padding: 4px 8px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
             white-space: nowrap;
-            min-width: 64px;
-            margin-right: 6px; /* similar spacing as the removed label */
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         /* WebKit browsers - hide the up/down arrows */
